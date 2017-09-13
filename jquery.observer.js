@@ -1,3 +1,8 @@
+/**
+ * @author Jy
+ * @name jquery.observer.js
+ * @date 2017-09-13
+ */
 ;(function ($){
   var __listener = {}
 
