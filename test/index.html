@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>jquery observer</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    header{
+      line-height: 40px;
+      background-color: #ccc;
+      text-align: center;
+      font-weight: bold;
+      width: 100%;
+    }
+    .comment-numbers {
+      color: red;
+    }
+    .comment-list,.comment-box {
+      width: 900px;
+      margin: 20px auto;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>All Comments:<span class="comment-numbers">0</span></header>
+  <section class="comment-list">
+    <ul class="comments"></ul>
+  </section>
+  <section class="comment-box">
+    <textarea name="" class="comment-box-content" cols="50" rows="10"></textarea>
+    <button class="add-comment-btn">addComment</button>
+  </section>
+
+  <script src="jquery.min.js"></script>
+  <script src="../jquery.observer.js"></script>
+  <script>
+    (function () {
+      /**
+       * add comment
+       */
+      var btn = document.querySelector('.add-comment-btn')
+      btn.addEventListener('click', function () {
+        var text = document.querySelector('.comment-box-content').value
+        var li = document.createElement('li')
+        li.innerHTML = text
+        document.querySelector('.comments').appendChild(li)
+        // publish a update event
+        $.publish('updateCommentNumber', {num: 1})
+      })
+
+    })()
+  </script>
+  <script>
+    (function () {
+      /**
+       *  now you have a new task which is to change the comment-numbers 
+       */
+       function updateCommentNumber(e) {
+         var el = document.querySelector('.comment-numbers')
+         var number = +el.innerText
+         el.innerText = number + e.data.num
+       }
+       $.subscribe('updateCommentNumber', updateCommentNumber)
+    })()
+  </script>
+</body>
+</html>
